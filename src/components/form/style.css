@@ -1,0 +1,45 @@
+.Form {
+    background-color: #eee;
+    
+    height: 100px;
+    margin: 0 auto 0;
+    padding: 0 30px 0;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.input_group {
+    font-size: 20px;
+    gap: 15px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;    
+}
+.input_group input {
+    border-radius: 10px;
+
+    border: 0;
+    font-size: 23px;
+    padding: 5px 10px;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+}
+.add_button {
+    width: 150px;
+    height: 40px;
+    font-size: 20px;
+    font-weight: 700;
+
+    background-color: #fff;
+    border: none;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+}
+.add_button:hover {
+    transform: scale(1.05);
+    transition-duration: .1s;
+    cursor: pointer;
+}
