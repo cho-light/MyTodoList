@@ -1,129 +1,183 @@
-import React, {useState} from 'react';
-import Todo from '../todo/Todo';
-import './style.css';
+import React from 'react';
 
-function List({setTodos, todos}) {
-//   const [todos, setTodos] = useState([
-//     {
-//       id: 1,
-//       title: "리액트 공부 어려움",
-//       body: "리액트 삭제를 공부해봅시다",
-//       isDone: false,
-//     },
-//     {
-//       id: 2,
-//       title: "리액트 공부하기",
-//       body: "리액트 기초를 공부해봅시다.",
-//       isDone: true,
-//     },
-// ]);
+import styled from "styled-components";
+import { Link } from 'react-router-dom';
 
-    // const [todo, setTodo] = useState([
-    //     {
-    //      id: 1,
-    //      title: "a",
-    //      body: "a", 
-    //      result: false
-    //     },
-    //     {
-    //     id: 2,
-    //     title: "a",
-    //     body: "a", 
-    //     result: true
-    //     },
-    // ])
-
-    // const onDeleteHandler = (todoId) => {
-    //     const newTodo = todo.filter((idx) => {
-    //         return idx.id !== todoId;
-    //     })
-    //     setTodo(newTodo);
-    // };
-
-    // const onEditHandler = (todoId) => {
-    //     const newTodo = todo.map((idx) => {
-    //         if(idx.id === todoId) {
-    //             return {
-    //                 ...idx,
-    //                 result: !idx.result
-    //             }
-    //         } else {
-    //             return {...idx};
-    //         }
-    //     });
-    //     setTodo(newTodo);
-    // }
+import { deleteTodo, editHandler } from '../../redux/modules/todos';
+import {useDispatch, useSelector} from "react-redux";
 
 
+
+
+function List() {
+    const dispatch = useDispatch();
+    const todoslist = useSelector((state) => state.todos)
     
-    const onDeleteHandler = (todoId) => {
-        const newTodos = todos.filter((todo) =>{
-            return todo.id !== todoId;
-        });
-        setTodos(newTodos);
+    const onDeleteHandler = (id) => {
+        dispatch(deleteTodo(id))
+    //     const newTodos = todos.filter((todo) =>{
+    //         return todo.id !== todoId;
+    //     });
+    //     setTodos(newTodos);
     };
 
-    const onEditHandler = (todoId) => {
-        const newTodos = todos.map((todo) => {
-            if(todo.id === todoId) {
-                return {
-                ...todo,
-                result: !todo.result,
-                };
-            } else {
-                return {...todo};
-            }
-        });
-
-        setTodos(newTodos);
-    }
+    const onEditHandler = (id) => {
+        dispatch(editHandler(id))
+    };
 
     return (
     
-        <div className="List">
+        <StList>
             <h2 className='list_title'>Working</h2>
-            <div className="list_wrapper">
-                {todos.map((idx) => {
+            <StList_wrapper>
+                {todoslist.map((idx) => {
                     if(!idx.result) {
+                        
                         return (
-                            <Todo
-                            todo={idx}
-                            key={idx.id}
-                            setTodo={setTodos}
-                            onDeleteHandler={onDeleteHandler}
-                            onEditHandler={onEditHandler}
-                            />
+                            <container key={idx.id}>
+                                <StTodoBox>
+                                    <StLink to={`/${idx.id}`} key={idx.id}>
+                                        <div>상세보기</div>
+                                    </StLink>
+                                    <StTodoText>
+                                        <h2 className='todo_title'>{idx.title}</h2>
+                                        <div>{idx.body}</div>
+                                    </StTodoText>
+
+                                    <StTodoButtonGroup>
+                                        <StTodButton
+                                        onClick={() => onDeleteHandler(idx.id)}>
+                                            삭제하기
+                                        </StTodButton>
+
+                                        <StTodButton
+                                        onClick={() => onEditHandler(idx.id)}
+                                        >
+                                        {idx.result ? "취소" : "완료"}
+                                        </StTodButton>
+                                        
+                                    </StTodoButtonGroup>
+
+                                 </StTodoBox>
+
+                            </container>
+                            
                         );
                     } else {
                         return null;
                     }
                 })}
-            </div>
+            </StList_wrapper>
 
 
             <h2 className='list_title'>Done!</h2>
-            <div className="list_wrapper">
-                {todos.map((idx) => {
+            <StList_wrapper>
+                {todoslist.map((idx) => {
                     if(idx.result){
                         return (
-                            <Todo
-                            todo={idx}
-                            key={idx.id}
-                            setTodo={setTodos}
-                            onDeleteHandler={onDeleteHandler}
-                            onEditHandler={onEditHandler}
-                            />
+                            <container key={idx.id}>
+                                <StTodoBox>
+                                    <StLink to={`/${idx.id}`} key={idx.id}>
+                                        <div>상세보기</div>
+                                    </StLink>
+                                    <StTodoText>
+                                        <h2 className='todo_title'>{idx.title}</h2>
+                                        <div>{idx.body}</div>
+                                    </StTodoText>
+
+                                    <StTodoButtonGroup>
+                                        <StTodButton
+                                        onClick={() => onDeleteHandler(idx.id)}>
+                                            삭제하기
+                                        </StTodButton>
+
+                                        <StTodButton
+                                        onClick={() => onEditHandler(idx.id)}
+                                        >
+                                        {idx.result ? "취소" : "완료"}
+                                        </StTodButton>
+                                    </StTodoButtonGroup>
+
+                                 </StTodoBox>
+
+                            </container>
                         );
                     } else {
                         return null;
                     }
                 })}
-            </div>
+            </StList_wrapper>
 
-        </div>
+        </StList>
         
     
     );
   }
   
   export default List;
+
+const StLink = styled(Link)`
+text-decoration: none;
+color: white;
+`;
+
+const StList = styled.div` 
+    margin: 10px 20px;    
+`
+const StList_wrapper = styled.div` 
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+`
+
+const StTodoBox = styled.div`
+background-color: rgb(0, 0, 0, 0.5);
+border: 3px solid rgb(206, 205, 205);
+border-radius: 15px;
+width: 300px;
+padding: 20px 0;
+display: flex;
+align-items: center;
+flex-direction: column;
+justify-content: center;
+text-align: left;
+gap: 30px;
+`
+
+const StTodoText = styled.div`
+color: #eee;
+text-shadow: 4px 2px 2px gray;
+
+display: flex;    
+align-items: center;
+flex-direction: column;
+justify-content: center;
+
+`
+const StTodoButtonGroup = styled.div`
+gap: 30px;
+
+display: flex;    
+align-items: center;
+justify-content: center;
+`
+const StTodButton = styled.div`
+color: #eee;
+display: flex;
+align-items: center;
+justify-content: center;
+background-color: rgb(0, 0, 0, 0.1);
+
+height: 40px;
+width: 100px;
+
+border-radius: 3px;
+border: none;
+box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;   
+
+&:hover {
+transform: scale(1.1);
+transition-duration: .1s;
+cursor: pointer;
+}
+`

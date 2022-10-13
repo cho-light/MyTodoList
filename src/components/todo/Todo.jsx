@@ -1,11 +1,12 @@
 import React from 'react';
 import './style.css';
 
+
+
 function Todo({todo, onDeleteHandler, onEditHandler}) {
     return (
-    
+        
         <div className="todo_box">
-
             <div className="todo_text">
                 <h2 className='todo_title'>{todo.title}</h2>
                 <div>{todo.body}</div>
@@ -29,6 +30,7 @@ function Todo({todo, onDeleteHandler, onEditHandler}) {
         </div>
         
 
+     
         
     //     <div className="todo-container">
     //   <div>

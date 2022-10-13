@@ -1,32 +1,56 @@
 import React,{ useState } from 'react';
 import './style.css';
+import { useDispatch, useSelector } from "react-redux";
+import {addTodo} from "../../redux/modules/todos"
 
-// let number = 3;  //이렇게 사용하면 오류날수있음
 
-function Form({setTodos, todos}) {
-    const initialState = {
-        id: 0,
-        title: "",
-        body: "",
-        isDone: false,
-    };
 
-    const[todo, setTodo] = useState(initialState);
-
-    const number = React.useRef(2) //ref 추후에 배우게됨
-
+function Form() {
+  const dispatch = useDispatch();
+  
+  // const initialState = {
+    //     id: 0,
+    //     title: "",
+    //     body: "",
+    //     isDone: false,
+    // };
+    
+    const number = useSelector((state) => state.todos[state.todos.length -1] ? state.todos[state.todos.length -1].id : 0);
+    
+    // console.log(useSelector((state) => state.todos[state.todos.length -1])) 연습
+    
+    
+    const [todo, setTodo] = useState({
+      id: 0,
+      title: "",
+      body: "",
+      result: false,
+    });
+    
+  
+    
     const onChageHandler = (event) => {
-        const {name, value} = event.target;
-        setTodo({...todo, [name]:value});
+      const {name, value} = event.target;
+      setTodo({...todo, [name]:value});
     };
+    
+    // const number = React.useRef(2) //ref 추후에 배우게됨
 
     const onSubmitHandler = (event) => {
         event.preventDefault();
         if(todo.title.trim() === "" || todo.body.trim() === "") return;
-        setTodos([...todos, {...todo, id:number.current}]);
-        setTodo(initialState);
-        number.current += 1;
-      }; // const number = React.useRef(2)와 id:number.current 를 사용해서
+        dispatch(addTodo({...todo, id: number + 1}));
+        setTodo({
+          id: 0,
+          title: "",
+          body: "",
+          result: false,
+        });
+        // number.current += 1;
+        // setTodo([...todo, {...todo, id:number.current}]);
+      };
+      
+      // const number = React.useRef(2)와 id:number.current 를 사용해서
       // 추가할때마다 id값에 +1이 됨. 각 생성된 박스마다 다른 id값을 가짐.
       
       
@@ -60,7 +84,7 @@ function Form({setTodos, todos}) {
             />
         </div>
         <button className='add_button'>추가하기</button> 
-      </form> 
+      </form>
     );
   }
 //input에 있는 value 값을 onChangeHandler 할것이다.
